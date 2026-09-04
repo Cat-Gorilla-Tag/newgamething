@@ -1,56 +1,121 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Unity WebGL Game</title>
-<style>
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        background: #000;
-        overflow: hidden;
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    #unity-canvas {
-        width: 100%;
-        height: 100%;
-        display: block;
-        background: #000;
-    }
+    <title>Game</title>
 
-    #loading {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: white;
-        font-family: Arial, sans-serif;
-        text-align: center;
-    }
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
 
-    #bar {
-        width: 300px;
-        height: 10px;
-        background: #333;
-        margin-top: 10px;
-    }
+        #unity-container {
+            width: 100%;
+            height: 100%;
+        }
 
-    #progress {
-        width: 0%;
-        height: 100%;
-        background: white;
-    }
-</style>
+        #unity-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: #000;
+        }
 
-</head> <body>
+        #unity-loading-bar {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+        }
 
-<canvas id="unity-canvas"></canvas>
+        #unity-progress-bar-empty {
+            width: 100%;
+            height: 10px;
+            background: #333;
+        }
 
-<div id="loading"> Loading... <div id="bar"> <div id="progress"></div> </div> </div> <script src="./webgl.loader.js"></script> <script> var canvas = document.getElementById("unity-canvas"); var loading = document.getElementById("loading"); var progress = document.getElementById("progress"); var config = {
-    dataUrl: "./webgl.data",
-    frameworkUrl: "./webgl.framework.js",
-    codeUrl: "./webgl.wasm",
-    streamingAssetsUrl: "./streaming_assets",
-    companyName: "empty",
-    productName: "empty",
-    productVersion: "0"
-};
-, codeUrl: "./webgl.wasm", streamingAssetsUrl: "./StreamingAssets", companyName: "empty", productName: "empty", productVersion: "0" }; createUnityInstance(canvas, config, function(value) { progress.style.width = (value * 100) + "%"; console.log("Loading:", Math.round(value * 100) + "%"); }) .then(function(instance) { window.unityInstance = instance; loading.style.display = "none"; console.log("Unity loaded!"); }) .catch(function(error) { console.error("Unity error:", error); loading.innerText = "Unity failed to load."; }); </script> </body> </html>
+        #unity-progress-bar-full {
+            width: 0%;
+            height: 10px;
+            background: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="unity-container">
+
+    <canvas id="unity-canvas"></canvas>
+
+    <div id="unity-loading-bar">
+        <div id="unity-progress-bar-empty">
+            <div id="unity-progress-bar-full"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var loaderUrl = "./webgl.loader.js";
+
+    var config = {
+        dataUrl: "./webgl.data",
+        frameworkUrl: "./webgl.framework.js",
+        codeUrl: "./webgl.wasm",
+
+        streamingAssetsUrl: "./StreamingAssets",
+
+        companyName: "empty",
+        productName: "empty",
+        productVersion: "0"
+    };
+
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingBar = document.querySelector("#unity-loading-bar");
+    var progressBar = document.querySelector("#unity-progress-bar-full");
+
+    var script = document.createElement("script");
+
+    script.src = loaderUrl;
+
+    script.onload = function () {
+
+        createUnityInstance(
+            canvas,
+            config,
+            function(progress) {
+                progressBar.style.width =
+                    (progress * 100) + "%";
+
+                console.log(
+                    "Loading:",
+                    Math.round(progress * 100) + "%"
+                );
+            }
+        ).then(function(unityInstance) {
+
+            loadingBar.style.display = "none";
+
+            console.log("UNITY STARTED");
+
+        }).catch(function(error) {
+
+            console.error("UNITY ERROR:", error);
+
+        });
+    };
+
+    document.body.appendChild(script);
+</script>
+
+</body>
+</html>
