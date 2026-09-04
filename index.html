@@ -5,13 +5,8 @@
         padding: 0;
         width: 100%;
         height: 100%;
-        overflow: hidden;
         background: #000;
-    }
-
-    #unity-container {
-        width: 100%;
-        height: 100%;
+        overflow: hidden;
     }
 
     #unity-canvas {
@@ -21,70 +16,32 @@
         background: #000;
     }
 
-    #unity-loading-bar {
-        position: absolute;
-        left: 50%;
+    #loading {
+        position: fixed;
         top: 50%;
+        left: 50%;
         transform: translate(-50%, -50%);
-        width: 300px;
-        display: none;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
     }
 
-    #unity-progress-bar-empty {
-        width: 100%;
+    #bar {
+        width: 300px;
         height: 10px;
         background: #333;
+        margin-top: 10px;
     }
 
-    #unity-progress-bar-full {
+    #progress {
         width: 0%;
-        height: 10px;
-        background: #fff;
+        height: 100%;
+        background: white;
     }
 </style>
 
 </head> <body>
-<div id="unity-container">
-    <canvas id="unity-canvas"></canvas>
 
-    <div id="unity-loading-bar">
-        <div id="unity-progress-bar-empty">
-            <div id="unity-progress-bar-full"></div>
-        </div>
-    </div>
-</div>
+<canvas id="unity-canvas"></canvas>
 
-<script src="./webgl.loader.js"></script>
-
-<script>
-    var canvas = document.querySelector("#unity-canvas");
-    var loadingBar = document.querySelector("#unity-loading-bar");
-    var progressBarFull = document.querySelector("#unity-progress-bar-full");
-
-    var config = {
-        dataUrl: "./webgl.data?v=2",
-        frameworkUrl: "./webgl.framework.js?v=2",
-        codeUrl: "./webgl.wasm?v=2",
-        streamingAssetsUrl: "./StreamingAssets",
-        companyName: "empty",
-        productName: "empty",
-        productVersion: "0"
-    };
-
-    loadingBar.style.display = "block";
-
-    createUnityInstance(canvas, config, function(progress) {
-        progressBarFull.style.width = (100 * progress) + "%";
-        console.log("Loading: " + Math.round(progress * 100) + "%");
-    })
-    .then(function(unityInstance) {
-        loadingBar.style.display = "none";
-        window.unityInstance = unityInstance;
-        console.log("Unity loaded!");
-    })
-    .catch(function(error) {
-        console.error("Unity failed to load:", error);
-    });
-</script>
-
-</body> </html>
+<div id="loading"> Loading... <div id="bar"> <div id="progress"></div> </div> </div> <script src="./webgl.loader.js"></script> <script> var canvas = document.getElementById("unity-canvas"); var loading = document.getElementById("loading"); var progress = document.getElementById("progress"); var config = { dataUrl: "./webgl.data", frameworkUrl: "./webgl.framework.js", codeUrl: "./webgl.wasm", streamingAssetsUrl: "./StreamingAssets", companyName: "empty", productName: "empty", productVersion: "0" }; createUnityInstance(canvas, config, function(value) { progress.style.width = (value * 100) + "%"; console.log("Loading:", Math.round(value * 100) + "%"); }) .then(function(instance) { window.unityInstance = instance; loading.style.display = "none"; console.log("Unity loaded!"); }) .catch(function(error) { console.error("Unity error:", error); loading.innerText = "Unity failed to load."; }); </script> </body> </html>
