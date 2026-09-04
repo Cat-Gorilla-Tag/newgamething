@@ -44,4 +44,13 @@
 
 <canvas id="unity-canvas"></canvas>
 
-<div id="loading"> Loading... <div id="bar"> <div id="progress"></div> </div> </div> <script src="./webgl.loader.js"></script> <script> var canvas = document.getElementById("unity-canvas"); var loading = document.getElementById("loading"); var progress = document.getElementById("progress"); var config = { dataUrl: "./webgl.data", frameworkUrl: "./webgl.framework.js", codeUrl: "./webgl.wasm", streamingAssetsUrl: "./StreamingAssets", companyName: "empty", productName: "empty", productVersion: "0" }; createUnityInstance(canvas, config, function(value) { progress.style.width = (value * 100) + "%"; console.log("Loading:", Math.round(value * 100) + "%"); }) .then(function(instance) { window.unityInstance = instance; loading.style.display = "none"; console.log("Unity loaded!"); }) .catch(function(error) { console.error("Unity error:", error); loading.innerText = "Unity failed to load."; }); </script> </body> </html>
+<div id="loading"> Loading... <div id="bar"> <div id="progress"></div> </div> </div> <script src="./webgl.loader.js"></script> <script> var canvas = document.getElementById("unity-canvas"); var loading = document.getElementById("loading"); var progress = document.getElementById("progress"); var config = {
+    dataUrl: "./webgl.data",
+    frameworkUrl: "./webgl.framework.js",
+    codeUrl: "./webgl.wasm",
+    streamingAssetsUrl: "./streaming_assets",
+    companyName: "empty",
+    productName: "empty",
+    productVersion: "0"
+};
+, codeUrl: "./webgl.wasm", streamingAssetsUrl: "./StreamingAssets", companyName: "empty", productName: "empty", productVersion: "0" }; createUnityInstance(canvas, config, function(value) { progress.style.width = (value * 100) + "%"; console.log("Loading:", Math.round(value * 100) + "%"); }) .then(function(instance) { window.unityInstance = instance; loading.style.display = "none"; console.log("Unity loaded!"); }) .catch(function(error) { console.error("Unity error:", error); loading.innerText = "Unity failed to load."; }); </script> </body> </html>
